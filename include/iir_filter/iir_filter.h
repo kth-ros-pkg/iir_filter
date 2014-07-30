@@ -41,6 +41,7 @@ class IIRFilter
 {
 public:
     // initialize with B, A coefficients
+    // it is assumed that these are row vectors
     // (follows Matlab model for filter function)
     IIRFilter(Eigen::MatrixXd B, Eigen::MatrixXd A);
     IIRFilter();

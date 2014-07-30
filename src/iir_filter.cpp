@@ -56,8 +56,8 @@ void IIRFilter::setCoefficients(Eigen::MatrixXd B, Eigen::MatrixXd A)
     B_ = B;
     A_ = A;
 
-    x_ = Eigen::MatrixXd::Zero(B.rows(), 1);
-    y_ = Eigen::MatrixXd::Zero(A.rows() - 1, 1);
+    x_ = Eigen::MatrixXd::Zero(B.cols(), 1);
+    y_ = Eigen::MatrixXd::Zero(A.cols() - 1, 1);
 }
 
 double IIRFilter::filter(double x)
@@ -67,13 +67,16 @@ double IIRFilter::filter(double x)
     x2.bottomRows(x2.rows() - 1) = x_.topRows(x_.rows() - 1);
     x_ = x2;
 
-    double y = (B_.transpose()*x_ - (A_.bottomRows(A_.rows()-1)).transpose()*y_)/A_(0, 0);
+    Eigen::MatrixXd A2 = A_.rightCols(A_.cols() - 1);
+
+    Eigen::MatrixXd y = ((B_*x_ - A2*y_)/A_(0, 0));
 
     Eigen::MatrixXd y2 = y_;
-    y2(0, 0) = y;
+    y2(0, 0) = y(0, 0);
     y2.bottomRows(y2.rows() - 1) = y_.topRows(y_.rows() - 1);
+    y_ = y2;
 
-    return y;
+    return y(0, 0);
 }
 
 void IIRFilter::reset()
