@@ -8,7 +8,7 @@ catkin_package(
   DEPENDS eigen
   CATKIN_DEPENDS 
   INCLUDE_DIRS include
-  LIBRARIES 
+  LIBRARIES iir_filter
 )
 
 include_directories(

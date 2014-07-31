@@ -58,25 +58,29 @@ void IIRFilter::setCoefficients(Eigen::MatrixXd B, Eigen::MatrixXd A)
 
     x_ = Eigen::MatrixXd::Zero(B.cols(), 1);
     y_ = Eigen::MatrixXd::Zero(A.cols() - 1, 1);
+
+    // preallocate memory for helper variables
+    A2_ = A_.rightCols(A_.cols() - 1);
+    x2_ = x_;
+    y2_ = y_;
+    y_output_ = Eigen::Matrix<double, 1, 1>::Zero();
 }
 
 double IIRFilter::filter(double x)
 {
-    Eigen::MatrixXd x2 = x_;
-    x2(0, 0) = x;
-    x2.bottomRows(x2.rows() - 1) = x_.topRows(x_.rows() - 1);
-    x_ = x2;
+    x2_ = x_;
+    x2_(0, 0) = x;
+    x2_.bottomRows(x2_.rows() - 1) = x_.topRows(x_.rows() - 1);
+    x_ = x2_;
 
-    Eigen::MatrixXd A2 = A_.rightCols(A_.cols() - 1);
+    y_output_ = (B_*x_ - A2_*y_)/A_(0, 0);
 
-    Eigen::MatrixXd y = ((B_*x_ - A2*y_)/A_(0, 0));
+    y2_ = y_;
+    y2_(0, 0) = y_output_(0, 0);
+    y2_.bottomRows(y2_.rows() - 1) = y_.topRows(y_.rows() - 1);
+    y_ = y2_;
 
-    Eigen::MatrixXd y2 = y_;
-    y2(0, 0) = y(0, 0);
-    y2.bottomRows(y2.rows() - 1) = y_.topRows(y_.rows() - 1);
-    y_ = y2;
-
-    return y(0, 0);
+    return y_output_(0, 0);
 }
 
 void IIRFilter::reset()

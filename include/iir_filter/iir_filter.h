@@ -61,4 +61,10 @@ private:
 
     Eigen::MatrixXd x_;
     Eigen::MatrixXd y_;
+
+    // helper variables
+    Eigen::MatrixXd A2_;
+    Eigen::MatrixXd x2_;
+    Eigen::MatrixXd y2_;
+    Eigen::Matrix<double, 1, 1> y_output_;
 };
