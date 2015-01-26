@@ -85,6 +85,6 @@ double IIRFilter::filter(double x)
 
 void IIRFilter::reset()
 {
-    x_ = Eigen::MatrixXd::Zero(B_.rows(), 1);
-    y_ = Eigen::MatrixXd::Zero(A_.rows() - 1, 1);
+    x_ = Eigen::MatrixXd::Zero(B_.cols(), 1);
+    y_ = Eigen::MatrixXd::Zero(A_.cols() - 1, 1);
 }
