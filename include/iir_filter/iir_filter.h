@@ -50,9 +50,9 @@ public:
 
     void setCoefficients(Eigen::MatrixXd B, Eigen::MatrixXd A);
 
-    double filter(double x);
+    double update(double x);
 
-    void reset();
+    void reset(double x0=0, double y0=0);
 
 private:
 
